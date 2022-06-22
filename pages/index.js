@@ -17,7 +17,7 @@ export default function Home() {
         setError(null);
         //loading 상태는 true로 바꿔준다.
         setLoading(true);
-        const response = await axios.get("/movies.json");
+        const response = await axios.get("http://localhost:8080/movie");
         setMovies(response.data);
       } catch (e) {
         setError(e);
@@ -68,7 +68,7 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="title-area">{movie.title}</div>
-                    <div className="fake-button">예매하기</div>
+                    <div className="fake-button">리뷰보기</div>
                   </div>
                 </li>
               ))}
@@ -164,8 +164,12 @@ export default function Home() {
         }
 
         .summary {
-          height: 157px;
+          display: -webkit-box;
+          -webkit-line-clamp: 7;
+          -webkit-box-orient: vertical;
+          height: 158px;
           overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         .my-score {

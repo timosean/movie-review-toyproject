@@ -34,8 +34,11 @@ export default function Login() {
     console.log(body);
 
     axios.post("http://localhost:8080/user/login", body).then((res) => {
-      Router.push("/");
       console.log(res);
+      if (res.status == 200) {
+        sessionStorage.setItem("userid", res.data);
+        Router.push("/");
+      }
     });
   };
 
