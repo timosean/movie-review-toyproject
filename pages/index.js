@@ -2,6 +2,8 @@ import Head from "next/head";
 import Header from "../src/components/header";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Router from "next/router";
+import Link from "next/link";
 
 export default function Home() {
   const [movies, setMovies] = useState(null);
@@ -35,6 +37,10 @@ export default function Home() {
   if (loading) return <div>로딩중...</div>;
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!movies) return null;
+
+  const onClickHandler = (movieid, e) => {
+    Router.push("/review/" + movieid);
+  };
 
   return (
     <div className="container">
@@ -72,7 +78,14 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="title-area">{movie.title}</div>
-                    <div className="fake-button">리뷰보기</div>
+                    <div
+                      className="fake-button"
+                      onClick={(e) => {
+                        onClickHandler(movie.id, e);
+                      }}
+                    >
+                      리뷰보기
+                    </div>
                   </div>
                 </li>
               ))}

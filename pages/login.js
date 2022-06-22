@@ -33,13 +33,17 @@ export default function Login() {
     };
     console.log(body);
 
-    axios.post("http://localhost:8080/user/login", body).then((res) => {
-      console.log(res);
-      if (res.status == 200) {
+    axios
+      .post("http://localhost:8080/user/login", body)
+      .then((res) => {
+        console.log(res);
         sessionStorage.setItem("userid", res.data);
         Router.push("/");
-      }
-    });
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err.response.data);
+      });
   };
 
   return (

@@ -1,7 +1,10 @@
 import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
+import Router from "next/router";
 import { useState } from "react";
+import { IoPersonOutline, IoLockClosedOutline } from "react-icons/io5";
+import { TiDelete } from "react-icons/ti";
 
 const checkid = (text) => {};
 
@@ -9,7 +12,6 @@ export default function Register() {
   const [id, Setid] = useState("");
   const [name, Setname] = useState("");
   const [pw, Setpw] = useState("");
-  const [error, setError] = useState(false);
 
   const idHandler = (e) => {
     e.preventDefault();
@@ -40,7 +42,14 @@ export default function Register() {
 
       axios
         .post("http://localhost:8080/user", body)
-        .then((res) => console.log(res));
+        .then((res) => {
+          console.log(res);
+          alert("회원 가입 성공!");
+          Router.push("/login");
+        })
+        .catch((err) => {
+          alert(err.response.data);
+        });
     }
   };
 
