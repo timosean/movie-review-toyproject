@@ -11,7 +11,8 @@ const Header = ({ loginStatus }) => {
   const router = useRouter();
   const onLogout = () => {
     sessionStorage.removeItem("userid");
-    router.reload((window.location.href = "/"));
+    router.push((window.location.href = "/"));
+    alert("성공적으로 로그아웃 되었습니다!");
   };
 
   return (

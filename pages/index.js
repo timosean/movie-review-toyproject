@@ -79,7 +79,7 @@ export default function Home() {
                     </div>
                     <div className="title-area">{movie.title}</div>
                     <div
-                      className="fake-button"
+                      className="review-button"
                       onClick={(e) => {
                         onClickHandler(movie.id, e);
                       }}
@@ -229,7 +229,7 @@ export default function Home() {
           text-overflow: ellipsis;
         }
 
-        .fake-button {
+        .review-button {
           position: absolute;
           height: 36px;
           bottom: 25px;
@@ -242,6 +242,10 @@ export default function Home() {
           color: white;
           font-weight: 500;
           width: 100%;
+        }
+
+        .review-button:hover {
+          cursor: pointer;
         }
 
         footer {

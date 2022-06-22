@@ -1,7 +1,6 @@
-import Head from "next/head";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { Rating } from "react-simple-star-rating";
 import axios from "axios";
 
 export default function Review() {
@@ -20,6 +19,14 @@ export default function Review() {
   const [mytext, setMytext] = useState(null);
   const [score, setScore] = useState(null);
   const [text, setText] = useState(null);
+
+  const [rating, setRating] = useState(0);
+
+  // Catch Rating value
+  const handleRating = (rate) => {
+    setRating(rate);
+    // other logic
+  };
 
   useEffect(() => {
     Setuserid(sessionStorage.getItem("userid"));
@@ -144,6 +151,10 @@ export default function Review() {
               <p>{myreview.time}</p>
               <p>{myreview.userid}님의 리뷰:</p>
               별점:{" "}
+              <Rating
+                onClick={handleRating}
+                ratingValue={rating} /* Available Props */
+              />
               <input
                 type="text"
                 value={myscore}

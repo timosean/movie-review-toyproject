@@ -35,10 +35,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/login.js"
     ],
-    "/review/[movieid]": [
+    "/mypage": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/review/[movieid].js"
+      "static/chunks/pages/mypage.js"
     ]
   },
   "ampFirstPages": []
