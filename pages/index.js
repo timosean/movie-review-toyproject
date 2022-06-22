@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Link from "next/link";
 import Header from "../src/components/header";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -9,7 +8,12 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const [loginStatus, setLoginStatus] = useState(false);
+
   useEffect(() => {
+    if (sessionStorage.getItem("userid") != null) {
+      setLoginStatus(true);
+    }
     const fetchMovies = async () => {
       try {
         //요청이 시작할 때는 error와 movies를 초기화
@@ -45,7 +49,7 @@ export default function Home() {
         />
       </Head>
 
-      <Header />
+      <Header loginStatus={loginStatus} />
 
       <main>
         <div className="movie-container">
@@ -167,7 +171,7 @@ export default function Home() {
           display: -webkit-box;
           -webkit-line-clamp: 7;
           -webkit-box-orient: vertical;
-          height: 158px;
+          height: 160px;
           overflow: hidden;
           text-overflow: ellipsis;
         }
