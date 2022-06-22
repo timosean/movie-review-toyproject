@@ -4,6 +4,7 @@ import axios from "axios";
 import { IoPersonOutline, IoLockClosedOutline } from "react-icons/io5";
 import { TiDelete } from "react-icons/ti";
 import { useState } from "react";
+import Router from "next/router";
 
 export default function Login() {
   const [idInput, setIdInput] = useState("");
@@ -32,9 +33,10 @@ export default function Login() {
     };
     console.log(body);
 
-    axios
-      .post("http://localhost:8080/user/login", body)
-      .then((res) => console.log(res));
+    axios.post("http://localhost:8080/user/login", body).then((res) => {
+      Router.push("/");
+      console.log(res);
+    });
   };
 
   return (

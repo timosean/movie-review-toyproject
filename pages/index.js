@@ -58,7 +58,17 @@ export default function Home() {
                 <li key={movie.id}>
                   <div className="movie-item-info">
                     <img src={movie.poster} />
-                    <div className="movie-score">{movie.summary}</div>
+                    <div className="movie-score">
+                      <div className="summary">{movie.summary}</div>
+                      <div className="my-score">
+                        <div className="preview">
+                          <p>관람평</p>
+                          <p>9.7</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="title-area">{movie.title}</div>
+                    <div className="fake-button">예매하기</div>
                   </div>
                 </li>
               ))}
@@ -104,6 +114,11 @@ export default function Home() {
           box-sizing: content-box;
         }
 
+        .movie-list {
+          margin-top: 40px;
+          width: 100%;
+        }
+
         .movie-list ul {
           list-style: none;
           padding: 0;
@@ -112,10 +127,15 @@ export default function Home() {
 
         .movie-list ul li {
           width: 230px;
-          height; 450px;
+          height: 450px;
           margin: 0 0 0 60px;
           padding: 0;
           position: relative;
+          float: left;
+        }
+
+        .movie-list ul li:nth-child(5n) ~ li {
+          margin-top: 60px;
         }
 
         .movie-item-info img {
@@ -139,8 +159,68 @@ export default function Home() {
           top: 0;
           z-index: 1;
           opacity: 1;
-          background-color: rgba(0,0,0,.8);
+          background-color: rgba(0, 0, 0, 0.8);
           transition: all 0.2s;
+        }
+
+        .summary {
+          height: 157px;
+          overflow: hidden;
+        }
+
+        .my-score {
+          margin-top: 100px;
+          overflow: hidden;
+          padding: 5px 0 0 0;
+          border-top: 1px solid #3c3c3c;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .preview {
+          display: inline-block;
+          vertical-align: middle;
+          line-height: 36px;
+        }
+
+        .preview p:first-child {
+          margin: 0 15px 0 0;
+          font-size: 0.8667em;
+          float: left;
+        }
+
+        .preview p:last-child {
+          color: #59bec9;
+          font-size: 1.6em;
+          margin: 0;
+          float: left;
+        }
+
+        .title-area {
+          width: 100%;
+          margin: 15px 0 0 0;
+          line-height: 25px;
+          font-size: 1.3333em;
+          font-weight: 700;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+        .fake-button {
+          position: absolute;
+          height: 36px;
+          bottom: 25px;
+          left: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 6px;
+          background-color: #f70000;
+          color: white;
+          font-weight: 500;
+          width: 100%;
         }
 
         footer {
