@@ -10,7 +10,7 @@ export default function Home() {
   const [error, setError] = useState(null);
 
   const [loginStatus, setLoginStatus] = useState(false);
-  const [avgscore, setAvgscore] = useState(0);
+  const [avgList, setAvgList] = useState(null);
 
   useEffect(() => {
     if (sessionStorage.getItem("userid") != null) {
@@ -23,8 +23,11 @@ export default function Home() {
         setError(null);
         //loading 상태는 true로 바꿔준다.
         setLoading(true);
-        const response = await axios.get("http://localhost:8080/movie");
+        let response = await axios.get("http://localhost:8080/movie");
         setMovies(response.data);
+        response = await axios.get("http://localhost:8080/review/score/");
+        console.log(response.data);
+        setAvgList(response.data);
       } catch (e) {
         setError(e);
       }
@@ -40,6 +43,18 @@ export default function Home() {
 
   const onClickHandler = (movieid, e) => {
     Router.push("/review/" + movieid);
+  };
+
+  const findAvg = (avglist, comp_id) => {
+    const ret = 0;
+
+    avglist.forEach((elem) => {
+      if (elem._id == comp_id) {
+        ret = elem.score;
+      }
+    });
+
+    return ret;
   };
 
   return (
@@ -73,7 +88,13 @@ export default function Home() {
                       <div className="my-score">
                         <div className="preview">
                           <p>관람평</p>
-                          <p>9.7</p>
+                          <p>
+                            {findAvg(avgList, movie.id) ? (
+                              findAvg(avgList, movie.id).toFixed(1)
+                            ) : (
+                              <span>0.0</span>
+                            )}
+                          </p>
                         </div>
                       </div>
                     </div>

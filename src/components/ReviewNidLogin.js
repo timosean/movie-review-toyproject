@@ -100,7 +100,7 @@ const ReviewNidLogin = ({ movieId }) => {
       .put("http://localhost:8080/review", body)
       .then((res) => {
         console.log(res);
-        alert("수정 성공!");
+        alert("리뷰를 수정하였습니다.");
         location.reload();
       })
       .catch((err) => {
@@ -234,6 +234,8 @@ const ReviewNidLogin = ({ movieId }) => {
           font-weight: 700;
           height: 100px;
           background: #f8f8fa;
+          margin-left: 30px;
+          margin-right: 30px;
         }
         .need-login span {
           margin-left: 5px;

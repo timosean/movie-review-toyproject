@@ -3,6 +3,7 @@ import Router from "next/router";
 import Head from "next/head";
 import Header from "../src/components/header";
 import axios from "axios";
+import { BsPersonBadge } from "react-icons/bs";
 
 export default function MyPage() {
   const [id, setId] = useState("");
@@ -38,6 +39,22 @@ export default function MyPage() {
     fetchUser(id);
   }, [id]);
 
+  const onQuit = (e) => {
+    e.preventDefault();
+
+    axios
+      .delete("http://localhost:8080/user/" + id)
+      .then((res) => {
+        console.log(res);
+        sessionStorage.removeItem("userid");
+        alert("회원 탈퇴처리 되었습니다.");
+        Router.push("/");
+      })
+      .catch((err) => {
+        alert(err.response.data);
+      });
+  };
+
   if (loading) return <div>로딩중...</div>;
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!user) return null;
@@ -56,8 +73,13 @@ export default function MyPage() {
           <h3>내 정보 | My Page</h3>
         </div>
         <div className="member-info-wrapper">
+          <div className="icon-area">
+            <BsPersonBadge size={80} />
+          </div>
           <div className="info-row">
-            name: {user}, id: {id}
+            <p>이름: {user}</p>
+            <p>아이디: {id}</p>
+            <button onClick={onQuit}>탈퇴하기</button>
           </div>
         </div>
       </div>
@@ -88,11 +110,53 @@ export default function MyPage() {
           box-sizing: content-box;
           line-height: 55px;
         }
+
+        .member-info-wrapper {
+          margin-top: 60px;
+          width: 100%;
+          height: 300px;
+          display: flex;
+          align-items: center;
+        }
+
+        .icon-area {
+          width: 80px;
+          height: 80px;
+        }
+
+        .info-row {
+          margin-left: 30px;
+          padding: 30px;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          font-size: 20px;
+        }
+
+        .info-row p {
+          margin-bottom: 40px;
+          width: 200px;
+        }
+
+        button {
+          width: 200px;
+          height: 60px;
+          border: none;
+          font-size: 20px;
+          background: #3c3c3c
+          color: white;
+        }
+
+        button:hover {
+          cursor: pointer;
+        }
       `}</style>
 
       <style jsx global>{`
         html,
-        body {
+        body,
+        p {
           padding: 0;
           margin: 0;
           font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,

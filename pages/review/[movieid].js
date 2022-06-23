@@ -105,29 +105,6 @@ export default function Review() {
         </div>
       </main>
 
-      <ul>
-        {reviews ? (
-          reviews.map((review) => (
-            <li key={review.userid}>
-              <p>{review.time}</p>
-              <p>{review.userid}님의 리뷰:</p>
-              <p>
-                별점:
-                <Rating
-                  readonly={true}
-                  allowHalfIcon={true}
-                  initialValue={review.score / 2}
-                  fillColor="#f70000"
-                />
-              </p>
-              <p>리뷰: {review.text}</p>
-            </li>
-          ))
-        ) : (
-          <p>그런거없음ㅋㅋ</p>
-        )}
-      </ul>
-
       <style jsx>{`
         .container {
           min-height: 100vh;
