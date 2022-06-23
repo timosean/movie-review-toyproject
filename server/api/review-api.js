@@ -5,7 +5,30 @@ const Movie = require("../model/movie");
 const User = require("../model/user");
 
 // get average score (at amovie): GET /review/score/<movieid:Number>
-router.get("/score/:movieid", async (req, res) => {});
+router.get("/score/:movieid", async (req, res) => {
+  if (isNaN(Number(req.params.movieid))) {
+    res.status(400).send("movieid should be number type");
+    return;
+  }
+  const ret = await Review.aggregate()
+    .match({ movieid: Number(req.params.movieid) })
+    .group({ _id: null, score: { $avg: "$score" } });
+  console.log(ret);
+  if (ret.length) res.send(String(ret[0].score));
+  else res.send("0");
+});
+
+// get all movies' average score : GET /review/score/
+router.get("/score/", async (req, res) => {
+  const agg = Review.aggregate();
+  agg
+    .group({ _id: "$movieid", score: { $avg: "$score" } })
+    .exec()
+    .then((ress) => {
+      console.log("all score sended");
+      res.send(ress);
+    });
+});
 
 // get all review (at a movie): GET /review/<movieid:Number>
 router.get("/:movieid", async (req, res) => {
@@ -14,12 +37,8 @@ router.get("/:movieid", async (req, res) => {
     return;
   }
   const reviews = await Review.find({ movieid: req.params.movieid }).lean();
-  //   if (reviews.length == 0) {
-  //     res.status(400).send("no such review");
-  //   } else {
   res.json(reviews);
   console.log("all review sended: " + req.params.movieid);
-  //   }
 });
 
 // get my review (at a movie): GET /review/<movieid:Number>/<userid:String>

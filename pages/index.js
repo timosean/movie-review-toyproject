@@ -3,7 +3,6 @@ import Header from "../src/components/header";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Router from "next/router";
-import Link from "next/link";
 
 export default function Home() {
   const [movies, setMovies] = useState(null);
@@ -11,6 +10,7 @@ export default function Home() {
   const [error, setError] = useState(null);
 
   const [loginStatus, setLoginStatus] = useState(false);
+  const [avgscore, setAvgscore] = useState(0);
 
   useEffect(() => {
     if (sessionStorage.getItem("userid") != null) {

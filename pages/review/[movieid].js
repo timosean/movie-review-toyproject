@@ -2,6 +2,11 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Rating } from "react-simple-star-rating";
 import axios from "axios";
+import Head from "next/head";
+import Header from "../../src/components/header";
+import { IoChatboxEllipsesOutline } from "react-icons/io5";
+import ReviewNidLogin from "../../src/components/ReviewNidLogin";
+import ReviewList from "../../src/components/ReviewList";
 
 export default function Review() {
   const router = useRouter();
@@ -11,42 +16,32 @@ export default function Review() {
 
   const [movie, setMovie] = useState(null);
   const [reviews, setReviews] = useState(null);
-  const [myreview, setMyreview] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const [myscore, setMyscore] = useState(null);
-  const [mytext, setMytext] = useState(null);
-  const [score, setScore] = useState(null);
-  const [text, setText] = useState(null);
+  const [avgrating, setAvgrating] = useState(0);
 
-  const [rating, setRating] = useState(0);
-
+  // rating: out of 100, score: out of 10
   // Catch Rating value
   const handleRating = (rate) => {
     setRating(rate);
+    // other logic
+  };
+  const handleAvgrating = (rate) => {
+    setAvgrating(rate);
     // other logic
   };
 
   useEffect(() => {
     Setuserid(sessionStorage.getItem("userid"));
   }, []);
-  useEffect(() => {
-    if (reviews == null) return;
-    reviews.forEach((element) => {
-      if (element.userid == userid) {
-        setMyreview(element);
-        setMyscore(element.score);
-        setMytext(element.text);
-      }
-    });
-  }, [reviews]);
 
   useEffect(() => {
-    if (userid == null || movieid == undefined) return;
+    if (movieid == undefined) return;
     const fetchMovie = async () => {
       try {
-        //요청이 시작할 때는 error와 movies를 초기화
+        //요청이 시작할 때는 error와 movie를 초기화
         setMovie(null);
         setError(null);
         //loading 상태는 true로 바꿔준다.
@@ -55,6 +50,8 @@ export default function Review() {
         setMovie(res.data);
         res = await axios.get("http://localhost:8080/review/" + movieid);
         setReviews(res.data);
+        res = await axios.get("http://localhost:8080/review/score/" + movieid);
+        setAvgrating(res.data);
       } catch (e) {
         setError(e);
       }
@@ -62,142 +59,167 @@ export default function Review() {
     };
 
     fetchMovie();
-  }, [userid, movieid]);
+  }, [movieid]);
 
   if (loading) return <div>로딩중...</div>;
   if (error) return <div>에러가 발생했습니다.</div>;
   if (!movie) return null;
 
-  const scoreHandler = (e) => {
-    setScore(e.target.value);
-  };
-  const textHandler = (e) => {
-    setText(e.target.value);
-  };
-
-  const addHandler = (e) => {
-    e.preventDefault();
-
-    const body = {
-      movieid: movieid,
-      userid: userid,
-      score: score,
-      text: text,
-    };
-    console.log(body);
-
-    axios
-      .post("http://localhost:8080/review", body)
-      .then((res) => {
-        console.log(res);
-        alert("추가 성공!");
-        location.reload();
-      })
-      .catch((err) => {
-        alert(err.response.data);
-      });
-  };
-  const delHandler = (e) => {
-    e.preventDefault();
-
-    axios
-      .delete("http://localhost:8080/review/" + myreview.id)
-      .then((res) => {
-        console.log(res);
-        alert("삭제 성공!");
-        location.reload();
-      })
-      .catch((err) => {
-        alert(err.response.data);
-      });
-  };
-
-  const myscoreHandler = (e) => {
-    setMyscore(e.target.value);
-  };
-  const mytextHandler = (e) => {
-    setMytext(e.target.value);
-  };
-  const modHandler = (e) => {
-    e.preventDefault();
-
-    const body = {
-      id: myreview.id,
-      score: myscore,
-      text: mytext,
-    };
-    console.log(body);
-
-    axios
-      .put("http://localhost:8080/review", body)
-      .then((res) => {
-        console.log(res);
-        alert("수정 성공!");
-        location.reload();
-      })
-      .catch((err) => {
-        alert(err.response.data);
-      });
-  };
-
   return (
-    <div>
-      <h1>{movie.title}</h1>
-      <img src={movie.poster}></img>
-      <div>
-        {myreview ? (
-          <div>
-            <div class="myreivew">
-              <p>{myreview.time}</p>
-              <p>{myreview.userid}님의 리뷰:</p>
-              별점:{" "}
-              <Rating
-                onClick={handleRating}
-                ratingValue={rating} /* Available Props */
-              />
-              <input
-                type="text"
-                value={myscore}
-                onChange={myscoreHandler}
-              ></input>
-              리뷰:{" "}
-              <input
-                type="text"
-                value={mytext}
-                onChange={mytextHandler}
-              ></input>
+    <div className="container">
+      <Head>
+        <title>영화정보 | {movie.title}</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <Header loginStatus={userid} />
+
+      <main>
+        <div className="review-container">
+          <div className="movie-info">
+            <img src={movie.poster} />
+            <div className="info-container">
+              <div className="title-wrap">
+                <h3 style={{ fontWeight: "700" }}>{movie.title}</h3>
+                <h3 id="title-rating">
+                  <Rating readonly={true} initialValue={avgrating / 2} />{" "}
+                  <span id="title-rating">{avgrating.toFixed(1)}</span>
+                </h3>
+              </div>
+              <div className="info-wrap">
+                <p className="summary">{movie.summary}</p>
+              </div>
             </div>
-            <button onClick={modHandler}>수정하기</button>
-            <button onClick={delHandler}>삭제하기</button>
           </div>
-        ) : (
-          <div>
-            <input
-              type="text"
-              placeholder="점수"
-              value={score}
-              onChange={scoreHandler}
-            ></input>
-            <input
-              type="text"
-              placeholder="내용"
-              value={text}
-              onChange={textHandler}
-            ></input>
-            <button onClick={addHandler}>리뷰 작성하기</button>
+          <div className="rating-container">
+            <div className="rating-tit">
+              <IoChatboxEllipsesOutline size={36} color="#342568" />{" "}
+              <span className="emph-wrap">
+                <span className="emph">{movie.title}</span>에 대한 이야기를
+                나눠보세요!
+              </span>
+            </div>
+            <ReviewNidLogin movieId={movieid} />
+            <ReviewList movieId={movieid} />
           </div>
-        )}
-      </div>
+        </div>
+      </main>
+
       <ul>
-        {reviews.map((review) => (
-          <li>
-            <p>{review.time}</p>
-            <p>{review.userid}님의 리뷰:</p>
-            <p>별점: {review.score}점</p>
-            <p>리뷰: {review.text}</p>
-          </li>
-        ))}
+        {reviews ? (
+          reviews.map((review) => (
+            <li key={review.userid}>
+              <p>{review.time}</p>
+              <p>{review.userid}님의 리뷰:</p>
+              <p>
+                별점:
+                <Rating
+                  readonly={true}
+                  allowHalfIcon={true}
+                  initialValue={review.score / 2}
+                  fillColor="#f70000"
+                />
+              </p>
+              <p>리뷰: {review.text}</p>
+            </li>
+          ))
+        ) : (
+          <p>그런거없음ㅋㅋ</p>
+        )}
       </ul>
+
+      <style jsx>{`
+        .container {
+          min-height: 100vh;
+          width: 100vw;
+          box-sizing: border-box;
+        }
+
+        .review-container {
+          width: 1400px;
+          margin: 0 auto;
+        }
+
+        h3 {
+          font-size: 36px;
+          font-weight: 500;
+          color: #222;
+          vertical-align: middle;
+          margin: 0;
+        }
+
+        .title-wrap {
+          height: 60px;
+          border-bottom: 3px solid #241d1e;
+          box-sizing: content-box;
+          display: flex;
+          justify-content: space-between;
+        }
+
+        #title-rating {
+          color: #6543b1;
+        }
+
+        .movie-info {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          height: 500px;
+          padding-top: 20px;
+          box-sizing: content-box;
+        }
+
+        .movie-info img {
+          width: 280px;
+          height: 400px;
+          border-radius: 10px;
+        }
+
+        .info-container {
+          margin-left: 30px;
+          height: 400px;
+          width: 100%;
+        }
+
+        .summary {
+          margin: 0;
+          white-space: pre-line;
+          padding-top: 20px;
+        }
+
+        .rating-tit {
+          display: flex;
+          width: 100%;
+          align-items: center;
+        }
+
+        .emph-wrap {
+          margin-left: 5px;
+          font-size: 20px;
+        }
+
+        .emph {
+          font-weight: 700;
+          color: #342568;
+          margin-right: 5px;
+          font-size: 24px;
+        }
+      `}</style>
+
+      <style jsx global>{`
+        html,
+        body {
+          padding: 0;
+          margin: 0;
+          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+            sans-serif;
+        }
+
+        * {
+          box-sizing: border-box;
+        }
+      `}</style>
     </div>
   );
 }

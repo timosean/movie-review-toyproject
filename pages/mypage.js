@@ -28,7 +28,7 @@ export default function MyPage() {
         setError(null);
         setLoading(true);
         const response = await axios.get("http://localhost:8080/user/" + id);
-        setUser(JSON.stringify(response.data.name));
+        setUser(String(response.data.name));
       } catch (e) {
         setError(e);
       }
@@ -57,7 +57,7 @@ export default function MyPage() {
         </div>
         <div className="member-info-wrapper">
           <div className="info-row">
-            name: {user.substring(1, 4)}, id: {id}
+            name: {user}, id: {id}
           </div>
         </div>
       </div>

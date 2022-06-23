@@ -44,12 +44,14 @@ const Header = ({ loginStatus }) => {
               </div>
             </Link>
           )}
-          <Link href="/register" className="link">
-            <div className="member-content">
-              <IoPersonAddOutline size="35" />
-              <span>회원가입</span>
-            </div>
-          </Link>
+          {loginStatus ? null : (
+            <Link href="/register" className="link">
+              <div className="member-content">
+                <IoPersonAddOutline size="35" />
+                <span>회원가입</span>
+              </div>
+            </Link>
+          )}
           <Link href="/mypage" className="link">
             <div className="member-content">
               <IoPersonOutline size="35" />
@@ -82,7 +84,7 @@ const Header = ({ loginStatus }) => {
           .header-memberinfo {
             display: flex;
             flex-grow: 1;
-            justify-content: center;
+            justify-content: flex-end;
           }
 
           .member-content {
@@ -90,7 +92,7 @@ const Header = ({ loginStatus }) => {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin-right: 60px;
+            margin-left: 60px;
             transition: all 0.3s;
           }
 

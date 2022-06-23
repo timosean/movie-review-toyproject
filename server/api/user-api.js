@@ -3,6 +3,13 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 const User = require("../model/user");
 
+// get all users: GET /user
+router.get("/", async (req, res) => {
+  const users = await User.find({}).lean();
+  res.json(users);
+  console.log("all user info sended");
+});
+
 // get user: GET /user/<id:String>
 router.get("/:id", async (req, res) => {
   const user = await User.findOne({ id: req.params.id }).lean();
@@ -12,13 +19,6 @@ router.get("/:id", async (req, res) => {
     res.json(user);
     console.log("user info sended: " + req.params.id);
   }
-});
-
-// get all users: GET /user
-router.get("/", async (req, res) => {
-  const users = await User.find({}).lean();
-  res.json(users);
-  console.log("all user info sended");
 });
 
 // add user: POST /user
@@ -85,13 +85,6 @@ router.post("/login", async (req, res) => {
       res.status(401).send("pw wrong");
       console.log("login failed: " + req.body.id);
     } else {
-      // res.cookie("userInfo", {
-      // 	name: user.name,
-      // 	id: user.id,
-      // }, {
-      // 	maxAge: 1000*60*60, // 1 hour
-      // 	httpOnly: true
-      // });
       res.status(200).json(user.id);
       console.log("login success: " + req.body.id);
     }

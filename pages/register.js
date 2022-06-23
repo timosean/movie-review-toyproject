@@ -3,8 +3,6 @@ import Head from "next/head";
 import Link from "next/link";
 import Router from "next/router";
 import { useState } from "react";
-import { IoPersonOutline, IoLockClosedOutline } from "react-icons/io5";
-import { TiDelete } from "react-icons/ti";
 
 const checkid = (text) => {};
 
@@ -12,6 +10,7 @@ export default function Register() {
   const [id, Setid] = useState("");
   const [name, Setname] = useState("");
   const [pw, Setpw] = useState("");
+  const [error, setError] = useState(false);
 
   const idHandler = (e) => {
     e.preventDefault();
