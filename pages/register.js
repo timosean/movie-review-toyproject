@@ -34,13 +34,11 @@ export default function Register() {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    if (id === "" || name === "" || pw === "") setError(true);
-    if (pw != pw2) {
+    if (id === "" || name === "" || pw === "") {
+      alert("회원가입 양식을 모두 입력해주세요.");
+    } else if (pw != pw2) {
       alert("처음 입력한 비밀번호와 일치하지 않습니다.");
       return;
-    }
-    if (error) {
-      alert("회원가입 양식을 모두 입력해주세요.");
     } else {
       const body = {
         id: id,
