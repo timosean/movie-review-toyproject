@@ -91,6 +91,7 @@ export default function Register() {
                   className="input-text"
                   value={name}
                   onChange={nameHandler}
+                  autoComplete="off"
                 />
                 <span
                   className="error-msg"
@@ -110,6 +111,7 @@ export default function Register() {
                   title="ID"
                   maxLength="20"
                   className="input-text"
+                  autoComplete="off"
                 />
                 <span
                   className="error-msg"
