@@ -51,6 +51,11 @@ const ReviewNidLogin = ({ movieId }) => {
   const addHandler = (e) => {
     e.preventDefault();
 
+    if (text === "") {
+      alert("리뷰 내용을 입력해주세요.");
+      return;
+    }
+
     const body = {
       movieid: movieId,
       userid: userid,
@@ -88,6 +93,11 @@ const ReviewNidLogin = ({ movieId }) => {
 
   const modHandler = (e) => {
     e.preventDefault();
+
+    if (text === "") {
+      alert("수정할 내용을 입력해주세요.");
+      return;
+    }
 
     const body = {
       id: myreview.id,

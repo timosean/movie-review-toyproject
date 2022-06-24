@@ -140,10 +140,10 @@ export default function MyPage() {
         }
 
         button {
-          width: 200px;
-          height: 60px;
+          width: 150px;
+          height: 40px;
           border: none;
-          font-size: 20px;
+          font-size: 16px;
           background: #3c3c3c
           color: white;
         }
